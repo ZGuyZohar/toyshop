@@ -1,0 +1,23 @@
+[
+  {
+    "fullname": "Guy Zohar",
+    "username": "doobidoobi",
+    "password": "abc123",
+    "isAdmin": false,
+    "_id": "kCdJk"
+  },
+  {
+    "fullname": "Popo Pizza",
+    "username": "poporoni",
+    "password": "pipipapa",
+    "isAdmin": false,
+    "_id": "KEI2a"
+  },
+  {
+    "fullname": "Guy Zohar",
+    "username": "leedevile1",
+    "password": "abc123",
+    "isAdmin": true,
+    "_id": "k392k"
+  }
+]

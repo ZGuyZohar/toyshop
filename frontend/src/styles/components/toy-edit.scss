@@ -1,0 +1,25 @@
+.edit-form {
+    display: flex;
+    font-family: Rocknroll;
+    flex-direction: column;
+    align-items: center;
+
+    >span {
+        width: 300px;
+    }
+
+    .error {
+        color: $clr1;
+    }
+}
+
+.edit-form label {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+.edit-form .checkbox {
+    display: block;
+
+}

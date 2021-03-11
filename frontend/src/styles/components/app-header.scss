@@ -1,0 +1,15 @@
+.nav-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin: 15px;
+
+    >* {
+        margin-left: 10px;
+        font-weight: 700;
+        color: $clr4;
+    }
+    
+    .router-link-exact-active {
+        color: $clr5;
+    }
+}

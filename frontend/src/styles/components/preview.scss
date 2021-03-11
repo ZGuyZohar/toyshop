@@ -1,0 +1,45 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+
+    .preview-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+
+        >* {
+            width: 20%;
+        }
+    }
+}
+
+.prev-btn {
+    border: 2px solid black;
+    outline: none;
+    border-radius: 1em;
+    margin: 10px;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center;
+    height: 50px;
+    color: black;
+    cursor: pointer;
+    
+    &:hover {
+        filter: brightness(85%);
+    }
+    &.edit {
+        background-color: $clr3;
+
+    }
+
+    &.details {
+        background-color: $clr2;
+    }
+
+    &.remove {
+        background-color: $clr1;
+    }
+}
