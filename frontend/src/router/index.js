@@ -6,6 +6,7 @@ import toyApp from '../views/toy-app'
 import toyEdit from '../views/toy-edit'
 import toyDetails from '../views/toy-details'
 import dashboard from '../views/dashboard'
+import login from '../views/login'
 
 Vue.use(VueRouter)
 
@@ -31,13 +32,18 @@ const routes = [
   },
   {
     path: '/toy/dashboard',
-    name: 'Dasboard',
+    name: 'Dashboard',
     component: dashboard
   },
   {
     path: '/about',
     name: 'About',
     component: about
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: login
   }
 ]
 

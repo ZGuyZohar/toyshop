@@ -34,6 +34,7 @@ export default {
     mutations: {
         setToys(state, {toys}){
             state.toys = toys;
+            console.log(toys[0]);
         },
         updateToy(state, {savedToy}){
             const foundIdx = state.toys.findIndex(toy => {
@@ -42,7 +43,7 @@ export default {
             return state.toys.splice(foundIdx, 1, savedToy)
         },
         addToy(state, {savedToy}){
-            return state.toys.unshift(savedToy)
+            return state.toys.push(savedToy)
         },
         removeToy(state, {toyId}){
             const foundIdx = state.toys.findIndex((toy) => toy._id === toyId)
@@ -59,24 +60,18 @@ export default {
         }
     },
     actions: {
-        loadToys({commit}){
-            toyService.query()
-                .then((toys) => {
-                    commit({type: 'setToys', toys})
-                })
+        async loadToys({commit}){
+            const toys = await toyService.query()
+            commit({type: 'setToys', toys})
         },
-        saveToy(context, {newToy}){
+        async saveToy(context, {newToy}){
             let type = (newToy._id) ? 'updateToy' : 'addToy';
-            toyService.save(newToy)
-                .then(savedToy => {
-                    context.commit({type, savedToy})
-                })
+            const savedToy = await toyService.save(newToy)
+            context.commit({type, savedToy})
         },
-        removeToy(context, {toyId}){
-            toyService.remove(toyId)
-                .then(() => {
-                    context.commit({type: 'removeToy', toyId})
-                })
+        async removeToy(context, {toyId}){
+            await toyService.remove(toyId)
+            context.commit({type: 'removeToy', toyId})
         }
     }
 }

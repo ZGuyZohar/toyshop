@@ -2,7 +2,7 @@
   <section class="edit-container">
       <form class="edit-form" @submit.prevent="saveToy">
       <h1>{{msgToShow}} a toy</h1>
-      <validation-provider rules="required|empty" v-slot="{ errors }">
+      <validation-provider rules="required" v-slot="{ errors }">
           <label>
           Toy Name:    
           <input name="text" type="text" placeholder="Toy name" v-model="newToy.name" /> 
@@ -47,10 +47,6 @@ import { required } from 'vee-validate/dist/rules';
 extend('required', {
   ...required,
   message: 'This field is required'
-});
-extend('empty', value => {
-   value.length < 5;
-  return 'Name must have atleast 5 characters.';
 });
 
 export default {

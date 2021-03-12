@@ -1,8 +1,6 @@
-import axios from 'axios';
-import {storageService} from './async-storage-service.js'
+import {httpService} from './http.service.js'
 
-const KEY = 'toysDB';
-const TOY_URL = 'http://localhost:3030/api/toy/'
+const TOY_URL = '/toy/'
 
 export const toyService = {
     query,
@@ -14,23 +12,22 @@ export const toyService = {
 
 
 function query() {
-    return axios.get(TOY_URL).then(res => res.data)
+    return httpService.get(TOY_URL)
 }
 
 function getById(id) {
-    return axios.get(TOY_URL + id).then(res => res.data)
+    return httpService.get(TOY_URL + id)
 }
 
 function remove(id) {
-    return axios.delete(TOY_URL + id).then(res => res.data)
+    return httpService.delete(TOY_URL + id)
 }
 
 function save(toy) {
     if (toy._id) {
-        console.log(toy);
-        return axios.put(TOY_URL + toy._id, toy).then(res => res.data)
+        return httpService.put(TOY_URL + toy._id, toy)
     } else {
-        return axios.post(TOY_URL, toy).then(res => res.data)
+        return httpService.post(TOY_URL, toy)
     }
 }
 

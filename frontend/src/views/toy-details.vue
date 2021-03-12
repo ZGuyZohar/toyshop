@@ -28,7 +28,8 @@ export default {
             return this.toy.inStock ? 'Yes' : 'No'
         },
         dateToShow(){
-            const date = new Date(this.toy.createdAt)
+            let date = Date.now(this.toy.createdAt)
+            date = new Date(date)
             return date.toLocaleDateString('he-IL')
         }
     },
