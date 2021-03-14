@@ -8,6 +8,12 @@
         <li><b>Toy Type:</b> {{toy.type}}</li>
         <li><b>Last shipment brought at: </b>{{dateToShow}}</li>
     </ul>
+
+    <form @submit.prevent="addReview">
+        <h1>Add review:</h1>
+        <textarea v-model="review.txt"></textarea>
+        <button>Add review</button>
+    </form>
   </section>
 </template>
 
@@ -17,7 +23,13 @@ export default {
     name: 'toy-details',
     data(){
         return {
-            toy: null
+            toy: null,
+            review: {txt: ''}
+        }
+    },
+    methods: {
+        addReview(){
+            this.$store.dispatch({type: 'addReview', reviewTxt: {txt: this.review.txt, toyId: this.toy._id}})
         }
     },
     computed: {

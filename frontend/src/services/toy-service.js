@@ -7,7 +7,8 @@ export const toyService = {
     getById,
     remove,
     save,
-    getEmptyToy
+    getEmptyToy,
+    addReview
 }
 
 
@@ -31,6 +32,9 @@ function save(toy) {
     }
 }
 
+function addReview(reviewTxt){
+    return httpService.post(TOY_URL+reviewTxt.toyId+'/review', reviewTxt.txt)
+}
 
 function getEmptyToy() {
     return {
@@ -38,7 +42,8 @@ function getEmptyToy() {
         price: null,
         type: '',
         createdAt: Date.now(),
-        inStock: true
+        inStock: true,
+        reviews: []
     }
 }
 

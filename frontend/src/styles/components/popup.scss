@@ -1,0 +1,32 @@
+.pop-up {
+    position: fixed;
+    bottom: 5%;
+    right: 3%;
+    width: 400px;
+    height: 400px;
+    background-color: #fff;
+    padding: 40px;
+    overflow: hidden;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+    .form {
+        position: absolute;
+        bottom: 14px;
+        padding: 10px 0;
+        background-color: white;
+    }
+
+    .chat-box {
+        height: 100%;
+        width: 100%;
+        max-height: 300px;
+        overflow-y: scroll;
+    }
+
+    ul {
+        padding: 0;
+    }
+}

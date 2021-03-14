@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         logout(){
-        this.$store.dispatch({type: 'logout'})
+            this.$store.dispatch({type: 'logout'})
         }
     }
 }

@@ -1,9 +1,10 @@
 const toyService = require('./toy.service')
+const reviewService = require('../review/review.service')
+const userService = require('../user/user.service')
 const logger = require('../../services/logger.service')
 
 async function getToy(req, res) {
     try {
-        console.log(req.params.id);
         const toy = await toyService.getById(req.params.id)
         res.send(toy)
     } catch (err) {
@@ -61,10 +62,27 @@ async function updateToy(req, res) {
     }
 }
 
+
+async function addReview(req, res) {
+    try {
+        var review = req.body
+        review.byUserId = req.session.user._id
+        review = await reviewService.add(review)
+        review.byUser = req.session.user
+        review.aboutUser = await userService.getById(review.aboutUserId)
+        res.send(review)
+
+    } catch (err) {
+        logger.error('Failed to add review', err)
+        res.status(500).send({ err: 'Failed to add review' })
+    }
+}
+
 module.exports = {
     getToy,
     getToys,
     deleteToy,
     addToy,
-    updateToy
+    updateToy,
+    addReview
 }

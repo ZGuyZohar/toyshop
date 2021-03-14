@@ -1,66 +1,54 @@
 <template>
   <div class="about">
     <h1>Our branches across the country:</h1>
-    <GmapMap  ref="mapRef" @click="test"
-  :center="center"
-  :zoom="7"
-  map-type-id="terrain"
-  style="width: 500px; height: 300px"
-  @center_changed="updateCenter"
->
-
-  <!-- <GmapMarker
-    :key="index"
-    v-for="(m, index) in markers"
-    :position="m.position"
-    :clickable="true"
-    :draggable="true"
-    @click="center=m.position"
-  /> -->
-</GmapMap>
+    <g-maps :pos="pos"/>
+    <button @click="setPos('tel-aviv')">Tel-Aviv</button>
+    <button @click="setPos('jerusalem')">Jerusalem</button>
+    <button @click="setPos('ashkelon')">Ashkelon</button>
+  <h1>Contact us:</h1>
+  <a @click="popupToggle(true)" href="#">By Live Chat</a>
+    <pop-up v-if="isPopupOpen" @closePopup="popupToggle"> 
+       <template v-slot:header>
+        <p>Welcome to the customer support</p>
+       </template>
+       <chat-box></chat-box>
+       <template v-slot:footer>This is the footer</template>
+    </pop-up>
   </div>
 </template>
 <script>
-
+import popUp from '../cmps/popup'
+import chatBox from '../cmps/chat-box'
+import gMaps from '../cmps/packages/g-maps'
 export default {
   name: 'about',
   data() {
     return {
-      currentLocation : { lat : 32.074979, lng : 34.775880},
-      searchAddressInput: ''
+      isPopupOpen: false,
+      pos: {lat:32.109333, lng:34.855499}
     }
   },
   methods: {
-    test(){
-      console.log(this.$refs);
-      this.$refs.mapRef.$mapPromise.then((map) => {
-        map.panTo({lat: this.currentLocation.lat, lng: this.currentLocation.lng})
-      })
+    popupToggle(boolean) {
+      this.isPopupOpen = boolean
     },
-      updateCenter(center) {
-    this.center = {
-      lat: center.lat(),
-      lng: center.lng()
-    }
-  },
-    geolocation : function() {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.currentLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-      });
-    }    
+    setPos(name) {
+      if (name === 'tel-aviv') this.pos = {lat:32.109333, lng:34.855499} 
+      if (name === 'ashkelon') this.pos = {lat:31.66926 , lng:34.57149}
+      if (name === 'jerusalem') this.pos = {lat:31.771959, lng:35.217018}
+}    
   },
     mounted () {
-      this.geolocation();
-    // At this point, the child GmapMap has been mounted, but
-    // its map has not been initialized.
-    // Therefore we need to write mapRef.$mapPromise.then(() => ...)
- 
-    this.$refs.mapRef.$mapPromise.then((map) => {
-      map.panTo({lat: 1.38, lng: 103.80})
+      document.addEventListener('keyup', (e) => {
+        if (e.keyCode === 27 && this.isPopupOpen) {
+          this.isPopupOpen = false
+      }
     })
+  },
+  components: {
+    popUp,
+    chatBox,
+    gMaps
   }
 }
 </script>
