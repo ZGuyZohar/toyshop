@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import toyStore from './toy-store.js'
+import reviewStore from './review-store.js'
+import {socketStore} from './socket-store.js'
 import {userService} from '../services/user-service.js'
 import router from '../router'
 
@@ -10,7 +12,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   strict: true,
   state: {
-    currentUser: null
+    currentUser: JSON.parse(sessionStorage.getItem('currentUser')) || null  
   },
   getters: {
     currUser(state){
@@ -20,9 +22,11 @@ export default new Vuex.Store({
   mutations: {
     setCurrUser(state, {currUser}){
       state.currentUser = currUser
+      sessionStorage.setItem('currentUser', JSON.stringify(currUser))
     },
     logout(state){
       state.currentUser = null
+      sessionStorage.setItem('currentUser', null)
     }
   },
   actions: {
@@ -41,6 +45,8 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    toyStore
+    toyStore,
+    reviewStore,
+    socketStore
   }
 })

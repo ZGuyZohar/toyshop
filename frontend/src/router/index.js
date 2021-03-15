@@ -7,6 +7,7 @@ import toyEdit from '../views/toy-edit'
 import toyDetails from '../views/toy-details'
 import dashboard from '../views/dashboard'
 import login from '../views/login'
+import userDetails from '../views/user-details'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: login
+  },
+  {
+    path: '/user/details',
+    name: 'User Details',
+    component: userDetails
   }
 ]
 

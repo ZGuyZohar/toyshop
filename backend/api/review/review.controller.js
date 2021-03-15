@@ -1,5 +1,4 @@
 const logger = require('../../services/logger.service')
-const userService = require('../user/user.service')
 const reviewService = require('./review.service')
 
 async function getReviews(req, res) {
@@ -25,8 +24,8 @@ async function deleteReview(req, res) {
 
 async function addReview(req, res) {
     try {
-        var review = req.body
-        console.log('hihi from review');
+        var review = {};
+        review.txt = req.body.reviewTxt.txt
         review.toyId = req.params.toyId
         review.byUserId = req.session.user._id
         review = await reviewService.add(review)

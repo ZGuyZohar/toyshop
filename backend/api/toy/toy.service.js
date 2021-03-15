@@ -10,7 +10,8 @@ module.exports = {
     getByToyname,
     remove,
     update,
-    add
+    add,
+    queryChat
 }
 
 async function query(filterBy = {}) {
@@ -123,4 +124,20 @@ function _buildCriteria(filterBy) {
     return criteria
 }
 
+async function queryChat(filterBy = {}) {
+    // if(filterBy.toyId) filterBy.toyId = ObjectId(filterBy.toyId)
+    try {
+        console.log(filterBy,'querychat!');
+        const collection = await dbService.getCollection('chat')
+        var chatList = await collection.find(filterBy).toArray()
+        chatList = chatList.map(chat => {
+            chat.createdAt = ObjectId(chat._id).getTimestamp()
+            return chat
+        })
+        return chatList
+    } catch (err) {
+        logger.error('cannot find chatList', err)
+        throw err
+    }
+}
 

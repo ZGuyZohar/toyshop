@@ -4,6 +4,8 @@ const asyncLocalStorage = require('../../services/als.service')
 
 async function query(filterBy = {}) {
     try {
+        if(filterBy.toyId) filterBy.toyId = ObjectId(filterBy.toyId)
+        if(filterBy.byUserId) filterBy.byUserId = ObjectId(filterBy.byUserId)
         // const criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('review')
         // const reviews = await collection.find(criteria).toArray()
@@ -26,21 +28,21 @@ async function query(filterBy = {}) {
             {
                 $lookup:
                 {
-                    from: 'user',
-                    localField: 'aboutUserId',
+                    from: 'toy',
+                    localField: 'toyId',
                     foreignField: '_id',
-                    as: 'aboutUser'
+                    as: 'toy'
                 }
             },
             {
-                $unwind: '$aboutUser'
+                $unwind: '$toy'
             }
         ]).toArray()
         reviews = reviews.map(review => {
-            review.byUser = { _id: review.byUser._id, fullname: review.byUser.fullname }
-            review.aboutUser = { _id: review.aboutUser._id, fullname: review.aboutUser.fullname }
+            review.byUser = { _id: review.byUser._id, username: review.byUser.username }
+            review.createdAt = ObjectId(review._id).getTimestamp()
             delete review.byUserId
-            delete review.aboutUserId
+            delete review.toyId
             return review
         })
         return reviews
@@ -48,7 +50,6 @@ async function query(filterBy = {}) {
         logger.error('cannot find reviews', err)
         throw err
     }
-
 }
 
 async function remove(reviewId) {
@@ -73,7 +74,7 @@ async function add(review) {
         // peek only updatable fields!
         const reviewToAdd = {
             byUserId: ObjectId(review.byUserId),
-            aboutUserId: ObjectId(review.aboutUserId),
+            toyId: ObjectId(review.toyId),
             txt: review.txt
         }
         const collection = await dbService.getCollection('review')

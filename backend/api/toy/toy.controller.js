@@ -62,21 +62,14 @@ async function updateToy(req, res) {
     }
 }
 
-
-async function addReview(req, res) {
-    try {
-        var review = req.body
-        review.byUserId = req.session.user._id
-        review = await reviewService.add(review)
-        review.byUser = req.session.user
-        review.aboutUser = await userService.getById(review.aboutUserId)
-        res.send(review)
-
-    } catch (err) {
-        logger.error('Failed to add review', err)
-        res.status(500).send({ err: 'Failed to add review' })
-    }
+async function getChat(req, res) {
+    const filterBy = req.query
+    console.log(filterBy, 'filterBy');
+    const chatList = await toyService.queryChat(filterBy);
+    console.log(chatList, 'from getchat');
+    res.json(chatList)
 }
+
 
 module.exports = {
     getToy,
@@ -84,5 +77,5 @@ module.exports = {
     deleteToy,
     addToy,
     updateToy,
-    addReview
+    getChat
 }

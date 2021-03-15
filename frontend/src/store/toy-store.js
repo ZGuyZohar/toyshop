@@ -73,8 +73,5 @@ export default {
             await toyService.remove(toyId)
             context.commit({type: 'removeToy', toyId})
         },
-        async addReview(context, {reviewTxt}){
-            await toyService.addReview(reviewTxt)
-        }
     }
 }

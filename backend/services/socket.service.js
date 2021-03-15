@@ -1,7 +1,6 @@
-
-
 const asyncLocalStorage = require('./als.service');
 const logger = require('./logger.service');
+const dbService = require('./db.service')
 
 var gIo = null
 var gSocketBySessionIdMap = {}
@@ -16,6 +15,7 @@ function connectSockets(http, session) {
     }));
     gIo.on('connection', socket => {
         // console.log('socket.handshake', socket.handshake)
+        console.log('connected');
         gSocketBySessionIdMap[socket.handshake.sessionID] = socket
         // TODO: emitToUser feature - need to tested for CaJan21
         // if (socket.handshake?.session?.user) socket.join(socket.handshake.session.user._id)
@@ -26,6 +26,7 @@ function connectSockets(http, session) {
             }
         })
         socket.on('chat topic', topic => {
+            console.log(topic, 'topic', socket.myTopic, 'myTopic');
             if (socket.myTopic === topic) return;
             if (socket.myTopic) {
                 socket.leave(socket.myTopic)
@@ -33,12 +34,25 @@ function connectSockets(http, session) {
             socket.join(topic)
             // logger.debug('Session ID is', socket.handshake.sessionID)
             socket.myTopic = topic
+            console.log(topic, 'topic2', socket.myTopic, 'myTopic2');
         })
-        socket.on('chat newMsg', msg => {
+        socket.on('chat newMsg', async (msg) => {
             // emits to all sockets:
+            console.log(socket.myTopic, 'from newmsg');
             // gIo.emit('chat addMsg', msg)
             // emits only to sockets in the same room
             gIo.to(socket.myTopic).emit('chat addMsg', msg)
+            const collection = await dbService.getCollection('chat')
+            await collection.insertOne(msg)
+        })
+        socket.on('chat isTyping', isTyping => {
+            gIo.to(socket.myTopic).emit('chat typingRes', isTyping)
+        })
+        socket.on('review-added', review => {
+            // emits to all sockets:
+            // gIo.emit('chat addMsg', msg)
+            // emits only to sockets in the same room
+            socket.broadcast.emit('review-added', review)
         })
 
     })
@@ -70,6 +84,3 @@ module.exports = {
     emit,
     broadcast
 }
-
-
-

@@ -11,25 +11,36 @@
 
     <form @submit.prevent="addReview">
         <h1>Add review:</h1>
-        <textarea v-model="review.txt"></textarea>
+        <textarea v-model="newReview.txt"></textarea>
         <button>Add review</button>
     </form>
+    <ul>
+        <li v-for="review in reviewsForShow" :key="review._id">
+            {{review.txt}} - {{review.byUser.username}}
+        </li>
+    </ul>
+    <chat :toy="toy" />
   </section>
 </template>
 
 <script>
 import {toyService} from '../services/toy-service'
+import chat from '../cmps/chat'
 export default {
     name: 'toy-details',
     data(){
         return {
             toy: null,
-            review: {txt: ''}
+            newReview: {txt: ''},
+            
         }
     },
     methods: {
-        addReview(){
-            this.$store.dispatch({type: 'addReview', reviewTxt: {txt: this.review.txt, toyId: this.toy._id}})
+        async addReview(){
+            await this.$store.dispatch({type: 'addReview', reviewTxt: {txt: this.newReview.txt, toyId: this.toy._id}});
+            // const foundReviews = await reviewService.query(this.toyId)
+            
+            this.newReview = {}
         }
     },
     computed: {
@@ -43,15 +54,18 @@ export default {
             let date = Date.now(this.toy.createdAt)
             date = new Date(date)
             return date.toLocaleDateString('he-IL')
+        },
+        reviewsForShow(){
+            return this.$store.getters.reviewsForShow
         }
     },
-    created(){
-        toyService.getById(this.toyId)
-            .then(foundToy => this.toy = foundToy)
+    async created(){
+        const foundToy = await toyService.getById(this.toyId);
+        this.toy = foundToy;
+        await this.$store.dispatch({type: 'loadReviews', toLoad: {id: this.toyId, type: 'toyId'}})
+    },
+    components: {
+        chat
     }
 }
 </script>
-
-<style>
-
-</style>

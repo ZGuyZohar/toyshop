@@ -8,7 +8,6 @@ export const toyService = {
     remove,
     save,
     getEmptyToy,
-    addReview
 }
 
 
@@ -32,9 +31,6 @@ function save(toy) {
     }
 }
 
-function addReview(reviewTxt){
-    return httpService.post(TOY_URL+reviewTxt.toyId+'/review', reviewTxt.txt)
-}
 
 function getEmptyToy() {
     return {
